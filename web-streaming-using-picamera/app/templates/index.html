@@ -1,136 +1,104 @@
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <title>Video Streaming Demonstration</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+  <head>
+    <title>Live Streaming</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" 
+    integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 
-</head>
+    <style>
+        
+        #img{
+            width=480;
+            height:500;
+        }
+        
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1 class="text-center mt-6">Raspberry Pi Camera Streamer</h1>
+      <div class="flex justify-center mt-6 mb-4">
+        <img id="img"  src="{{ url_for('video_feed') }}">
+      </div>
+	 <form method="POST" action="/servo" id="servo-control-form">
+         
+         <div style="margin-left:700px">
+             
+    
+         
+            <p>Pan <input type="range" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" min="1" max="12.5" name="slider1" /> </p>
+             
+            <p>Tilt <input type="range" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" min="1" max="12.5" name="slider2" /> </p>
+            
+            
 
-<body>
-    <div class="main">
-
-        <h1 class="text-center mt-6" id="h1">Raspberry Pi Camera Streamer</h1>
-
-
-        <div class="flex justify-center mt-6">
-            <img id="img" src="{{ url_for('video_feed') }}">
+        </div>
+        
+        <div style="margin-left:680px;margin-top:25px">            
+            <input type="submit" 
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            value="submit" />
+             
+             <button type="button" id="reset-button"
+             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none 
+             dark:focus:ring-blue-800"
+             >Reset</button>
         </div>
 
 
-        <form method="POST" action="/req" id="main-form" class="flex justify-center">
+    </form>
 
-
-            <div>
-
-                <div class="">
-
-
-
-                    <label for="slider1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        id="Pan">Pan</label>
-                    <input id="minmax-range" type="range" min="0" max="10" value="5"
-                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 mb-4">
-
-
-                    <label for="slider2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        id="Tilt">Tilt</label>
-                    <input id="minmax-range" type="range" min="0" max="10" value="5"
-                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 mb-4">
-
-
-
-
-
-
-
-
-                    <!-- <label for="slider1" id="Pan"
-                        class="">Pan</label>
-                    <input type="range" min="1" max="12.5" name="slider1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 mb-2" />
-
-                    <label for="slider2" id="Tilt">Tilt</label>
-                    <input type="range" min="1" max="12.5" name="slider2" /> -->
-
-                </div>
-
-                <div class="mb-4 mt-6" id="btn-grp">
-
-
-                    <input type="submit" id="as"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                        value="Submit" />
-
-                    <input type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mb-4"
-                        value="Reset" />
-
-
-                    <!-- <input type="submit" value="submit" class="mt-4 mr-4" />
-                    <button type="button" id="reset-button" class="ml-4">Reset</button> -->
-                </div>
-
-            </div>
-        </form>
-        <div class="flex justify-center mt-4" id="capture">
-            <button
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                Capture Image
-            </button>
-            <!-- <button id="capture-button"> Capture Image </button> -->
-        </div>
+    <div style="margin-left:700px;margin-top:25px">   
+        <button id="capture-button"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        > Capture Image </button>
     </div>
-    <script>
+    </div>
+        <script>
 
-
-
-
-        const form1 = document.getElementById("main-form");
+        const form1 = document.getElementById("servo-control-form");
 
         form1.addEventListener("submit", (e) => {
             e.preventDefault();
-
+            
             const formData1 = new FormData(form1);
-            fetch("/req", {
+            fetch("/servo", {
                 method: "POST",
                 body: formData1,
             })
-                .then((response) => {
-                    if (response.ok) {
-                        console.log("Servo control successful");
-                    } else {
-                        console.error("Failed to control servos");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
+            .then((response) => {
+                if (response.ok) {
+                    console.log("Servo control successful");
+                } else {
+                    console.error("Failed to control servos");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
         });
-
-        $(document).ready(function () {
-            $("#capture-button").click(function () {
+        
+        $(document).ready(function() {
+            $("#capture-button").click(function() {
                 $.ajax({
                     url: "/capture",
                     type: "POST",
-                    success: function (data) {
+                    success: function(data) {
                         // Display the captured image
                         // $("#captured-image").attr("src", data.image_link);
                         console.log("Failed to capture image.");
                     },
-                    error: function () {
+                    error: function() {
                         alert("Failed to capture image.");
                     }
                 });
             });
         });
-
-
+        
+        
     </script>
-</body>
-
+  </body>
 </html>
