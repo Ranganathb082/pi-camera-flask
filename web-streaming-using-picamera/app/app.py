@@ -110,17 +110,14 @@ def capture():
             #pass
 
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        #print("AsAS",process.returncode)
+        
         stdout, stderr = process.communicate()
-        #send_mail(filename)
+        
         
         
         if process.returncode != None:
             # Start the camera thread again after capturing the image
-            print("start")
-            #camera_thread = CameraThread()
-            #camera_thread.start()
-            #print("start")
+            
             camera_thread = threading.Thread(target=gen, args=(Camera(),))
             camera_thread.daemon = True
             camera_thread.start()
@@ -141,5 +138,6 @@ def capture():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    app.run(host='0.0.0.0', threaded=True)
+    app.run(port='3001', host='0.0.0.0', threaded=True)
+
 
